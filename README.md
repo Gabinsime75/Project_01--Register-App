@@ -18,6 +18,6 @@
 - [tfsec]
   
 ## Project Arcitecture
-![alt text](https://github.com/Gabinsime75/Project_15--Register-App/blob/main/Project_Arch.jpg)register-app
+![alt text](https://github.com/Gabinsime75/Project_01--Register-App/blob/main/Project_Arch.jpg)
 
 
