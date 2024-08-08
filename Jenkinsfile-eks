@@ -1,13 +1,7 @@
 pipeline {
-<<<<<<< HEAD
     agent any // Specifies that the pipeline can run on any available agent.
 
-    parameters {   // Defines user inputs for the pipeline.
-=======
-    agent any
-
     parameters {
->>>>>>> 01f3f5598e1685ca606978e5c816e4ed785ee913
         choice(
             name: 'ACTION',
             choices: ['apply', 'destroy'],
@@ -16,11 +10,7 @@ pipeline {
     }
 
     environment {
-<<<<<<< HEAD
-        AWS_ACCESS_KEY_ID = credentials('AWS Credentials')  // Fetch AWS credentials using the ID 'AWS Credentials' from Jenkins credentials store.
-=======
         AWS_ACCESS_KEY_ID = credentials('AWS Credentials')
->>>>>>> 01f3f5598e1685ca606978e5c816e4ed785ee913
         AWS_SECRET_ACCESS_KEY = credentials('AWS Credentials')
     }
 
@@ -28,13 +18,6 @@ pipeline {
         stage('Checkout code') {
             steps {
                 git branch: 'main', url: 'https://github.com/Gabinsime75/Project_15--Register-App.git'
-            }
-        }
-
-        stage('List files') {
-            steps {
-                sh 'ls -la'
-                sh 'ls -la EKS_Terraform'
             }
         }
 
@@ -58,7 +41,6 @@ pipeline {
             }
         }
 
-<<<<<<< HEAD
         stage('Tfsec') {  // This stage will ensure that your Terraform code is checked for potential security vulnerabilities before proceeding with the plan and apply/destroy stages
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Credentials']]) {
@@ -76,8 +58,6 @@ pipeline {
         }
 
 
-=======
->>>>>>> 01f3f5598e1685ca606978e5c816e4ed785ee913
         stage('Terraform plan') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Credentials']]) {
@@ -98,8 +78,5 @@ pipeline {
             }
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 01f3f5598e1685ca606978e5c816e4ed785ee913
+

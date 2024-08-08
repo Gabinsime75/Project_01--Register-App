@@ -1,17 +1,20 @@
 pipeline{
+    // define the agent for the pipeline
     agent {label 'Jenkins-Agent'}
+
     tools {
         jdk 'jdk17'
         maven 'Maven3'
     }
 
     environment {
-	    APP_NAME = "register-app-pipeline"
-        RELEASE = "1.0.0"
-        DOCKER_USER = "gabin75"
-        DOCKER_PASS = 'dockerhub'
-        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
-        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+	    APP_NAME        = "register-app-pipeline"
+        RELEASE         = "1.0.0"
+        DOCKER_USER     = "gabin75"
+        DOCKER_PASS     = 'dockerhub'
+        IMAGE_NAME      = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_TAG       = "${RELEASE}-${BUILD_NUMBER}"
+        NVD_API_KEY     = "nvd-api-key"
     }
 
     stages{
@@ -23,7 +26,7 @@ pipeline{
 
         stage('Checkout from SCM'){
             steps{
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Gabinsime75/Project_15--Register-App.git'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Gabinsime75/Project_01--Register-App.git'
             }
         }
 
@@ -42,7 +45,7 @@ pipeline{
         stage("SonarQube Analysis"){
            steps {
 	           script {
-		        withSonarQubeEnv(credentialsId: 'Sonar-token') { 
+		        withSonarQubeEnv(credentialsId: 'sonarqube-token') { 
                         sh "mvn sonar:sonar"
 		            }
                 // echo 'SonarQube analysis triggered, skipping status check.'
@@ -53,7 +56,7 @@ pipeline{
        stage("Quality Gate"){
            steps {
                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
                 }	
             }
 
@@ -95,7 +98,7 @@ pipeline{
         // This command updates Trivy's database, ensuring that your scans are using the most recent vulnerability data, which is particularly useful for Java applications.
         stage('Update Trivy DB') {
             steps {
-                sh "trivy clean --java-db"
+                sh "trivy image --download-db-only"
             }
         }
 
@@ -118,5 +121,4 @@ pipeline{
        }
     }
 }      
-
 
