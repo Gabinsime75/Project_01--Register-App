@@ -19,24 +19,28 @@ pipeline{
 
     stages{
         stage('Cleanup Workspace'){
+            // Cleans the workspace before starting the pipeline to ensure no residual files affect the build.
             steps{
                 cleanWs()
             }
         }
 
         stage('Checkout from SCM'){
+            // Checks out the code from the GitHub repository on the main branch using credentials identified as github.
             steps{
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/Gabinsime75/Project_01--Register-App.git'
             }
         }
 
         stage('Build Application'){
+            // Runs the Maven command mvn clean package to compile the Java application and package it as a .jar file
             steps{
                 sh "mvn clean package"
             }
         }
 
         stage('Test Application'){
+            // Executes mvn test to run unit tests on the application, ensuring it behaves as expected.
             steps{
                 sh "mvn test"
             }
@@ -44,32 +48,31 @@ pipeline{
 
         stage("SonarQube Analysis"){
            steps {
+            // analyze the code for quality issues such as bugs, vulnerabilities, and code smells. 
 	           script {
 		        withSonarQubeEnv(credentialsId: 'sonarqube-token') { 
                         sh "mvn sonar:sonar"
 		            }
-                // echo 'SonarQube analysis triggered, skipping status check.'
 	           }	
            }
        }
 
        stage("Quality Gate"){
            steps {
+            // Waits for SonarQube's quality gate result to determine if the code passes the defined quality standards
                script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
                 }	
             }
-
         }
 
         stage ('OWASP Dependency Check') {
+            // Scans the project for known vulnerabilities in dependencies, 
             steps {
                 withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
                     dependencyCheck additionalArguments: '--scan ./ --format XML --nvdApiKey $NVD_API_KEY', odcInstallation: 'DP-Check'
                 }
-                // List files to check for the report
-                sh "ls -l"
-                // Verify the report's location
+                // The results are published in a report (dependency-check-report.xml).
                 sh "cat dependency-check-report.xml"
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
