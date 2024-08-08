@@ -61,7 +61,7 @@ pipeline{
            steps {
             // Waits for SonarQube's quality gate result to determine if the code passes the defined quality standards
                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
+                    waitForQualityGate abortPipeline: false, timeout: '10', credentialsId: 'sonarqube-token'
                 }	
             }
         }
