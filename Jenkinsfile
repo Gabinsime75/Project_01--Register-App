@@ -3,10 +3,11 @@ pipeline{
     agent {label 'Jenkins-Agent'}
 
     tools {
-        jdk 'jdk17'
+        jdk 'Java17'
         maven 'Maven3'
     }
 
+    // Define environmental variables
     environment {
 	    APP_NAME        = "register-app-pipeline"
         RELEASE         = "1.0.0"
@@ -50,7 +51,7 @@ pipeline{
            steps {
             // analyze the code for quality issues such as bugs, vulnerabilities, and code smells. 
 	           script {
-		        withSonarQubeEnv(credentialsId: 'sonarqube-token') { 
+		        withSonarQubeEnv(credentialsId: 'SonarQube-token') { 
                         sh "mvn sonar:sonar"
 		            }
 	           }	
@@ -61,7 +62,7 @@ pipeline{
            steps {
             // Waits for SonarQube's quality gate result to determine if the code passes the defined quality standards
                script {
-                    waitForQualityGate abortPipeline: false, timeout: '10', credentialsId: 'sonarqube-token'
+                    waitForQualityGate abortPipeline: false, timeout: '10', credentialsId: 'SonarQube-token'
                 }	
             }
         }
