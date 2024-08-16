@@ -61,11 +61,11 @@ pipeline{
        stage("Quality Gate"){
            steps {
             // Waits for SonarQube's quality gate result to determine if the code passes the defined quality standards
-               script {
-                timeout(time: 2, unit: 'MINUTES')
-                    waitForQualityGate abortPipeline: false
-                }	
-            }
+            steps {
+               timeout(time: 5, unit: 'MINUTES') {
+                   waitForQualityGate abortPipeline: true
+               }
+           }
         }
 
         stage ('OWASP Dependency Check') {
