@@ -7,9 +7,9 @@ variable "vpc_ids" {
   description = "List of VPC IDs for each environment"
   type        = map(string)
   default = {
-    dev     = "vpc-059d4b31f1de1190d"
-    staging = "vpc-0947844a078ae4993"
-    prod    = "vpc-003d2d7e6751f34bc"
+    dev     = "vpc-0b6c1132c15bbce91"
+    staging = "vpc-048e1b7c8ed268d98"
+    prod    = "vpc-021b58378b4bc8a3c"
   }
 }
 
@@ -17,9 +17,9 @@ variable "subnet_ids" {
   description = "Map of subnet IDs for each environment"
   type        = map(list(string))
   default = {
-    dev     = ["subnet-0f0d253cdf1976b2d", "subnet-0f6538a966c357210", "subnet-0b4ea204d6b368bdd"]
-    staging = ["subnet-0689c037daf15f1f3", "subnet-07c34c488ab608d5b", "subnet-004d394ab2cc45aa6"]
-    prod    = ["subnet-0aea028f6c00994ba", "subnet-0db5d1f7b0ac3ca26", "subnet-0818fe97f3223e3f0"]
+    dev     = ["subnet-0ff6f77f4f9834494", "subnet-09afb0a3e5d2e9b6c", "subnet-05211599111983045"]
+    staging = ["subnet-020797a6e9ecca183", "subnet-04fcd42c4ac4741cc", "subnet-0a9fffd45a8cf2ea1"]
+    prod    = ["subnet-045ee399c57cb2cc4", "subnet-03835a281e570f0e6", "subnet-0f4b519456aa03083"]
   }
 }
 
@@ -100,8 +100,9 @@ resource "aws_iam_role_policy_attachment" "registry_read_only_policy_attachment"
 resource "aws_launch_configuration" "node_group" {
   for_each      = toset(local.environments)
   name          = "${each.key}-launch-configuration"
-  image_id      = "ami-04a81a99f5ec58529" # Replace with a valid AMI ID
+  image_id      = "ami-0aff18ec83b712f05" # Replace with a valid AMI ID
   instance_type = "t2.medium"
+  key_name      = "Oregon_kp"
 }
 
 # Auto Scaling Group
