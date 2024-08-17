@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Gabinsime75/Project_15--Register-App.git'
+                git branch: 'main', url: 'https://github.com/Gabinsime75/Project_01--Register-App.git', credentialsId: 'github'
             }
         }
 
