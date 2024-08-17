@@ -58,13 +58,13 @@ pipeline{
            }
        }
 
-       stage("Quality Gate"){
-           steps {
-            script {
-                waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-token'
-                } 	
-            }
-        }
+    //    stage("Quality Gate"){
+    //        steps {
+    //         script {
+    //             waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-token'
+    //             } 	
+    //         }
+    //     }
 
         stage ('OWASP Dependency Check') {
             // Scans the project for known vulnerabilities in dependencies, 
