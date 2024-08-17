@@ -60,10 +60,9 @@ pipeline{
 
        stage("Quality Gate"){
            steps {
-            // Waits for SonarQube's quality gate result to determine if the code passes the defined quality standards
-             timeout(time: 10, unit: 'MINUTES') {
-                   waitForQualityGate abortPipeline: false
-               } 	
+            script {
+                waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-token'
+                } 	
             }
         }
 
