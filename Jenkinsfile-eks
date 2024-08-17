@@ -40,6 +40,13 @@ pipeline {
                 }
             }
         }
+        stage ('Pull tfsec Docker Image') {
+            steps {
+                script {
+                    docker pull aquasec/tfsec
+                }
+            }
+        }
 
         stage('Tfsec') {  // This stage will ensure that your Terraform code is checked for potential security vulnerabilities before proceeding with the plan and apply/destroy stages
             steps {
