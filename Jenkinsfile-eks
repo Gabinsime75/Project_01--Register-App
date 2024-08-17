@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'aquasec/tfsec:latest'
-            args '-v ${WORKSPACE}:/workspace'
-        }
-    }
+    agent any // Specifies that the pipeline can run on any available agent.
 
     parameters {
         choice(
