@@ -43,7 +43,7 @@ pipeline {
         stage ('Pull tfsec Docker Image') {
             steps {
                 script {
-                    docker pull aquasec/tfsec
+                    sh 'docker pull aquasec/tfsec'
                 }
             }
         }
