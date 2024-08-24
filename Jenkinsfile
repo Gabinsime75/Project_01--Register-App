@@ -9,7 +9,7 @@ pipeline{
 
     // Define environmental variables
     environment {
-	    APP_NAME        = "register-app-pipeline"
+	    APP_NAME        = "register-app-pipeline2"
         RELEASE         = "1.0.0"
         DOCKER_USER     = "gabin75"
         DOCKER_PASS     = 'dockerhub'
@@ -51,7 +51,7 @@ pipeline{
            steps {
             // analyze the code for quality issues such as bugs, vulnerabilities, and code smells. 
 	           script {
-		        withSonarQubeEnv(credentialsId: 'SonarQube-token') { 
+		        withSonarQubeEnv(credentialsId: 'Sonar-jenkins-token') { 
                         sh "mvn sonar:sonar"
 		            }
 	           }	
@@ -61,7 +61,7 @@ pipeline{
     //    stage("Quality Gate"){
     //        steps {
     //         script {
-    //             waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-token'
+    //             waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-jenkins-token'
     //             } 	
     //         }
     //     }
