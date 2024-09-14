@@ -40,29 +40,29 @@ pipeline {
                 }
             }
         }
-        stage ('Pull tfsec Docker Image') {
-            steps {
-                script {
-                    sh 'docker pull aquasec/tfsec'
-                }
-            }
-        }
+        // stage ('Pull tfsec Docker Image') {
+        //     steps {
+        //         script {
+        //             sh 'docker pull aquasec/tfsec'
+        //         }
+        //     }
+        // }
 
-        stage('Tfsec') {  // This stage will ensure that your Terraform code is checked for potential security vulnerabilities before proceeding with the plan and apply/destroy stages
-            steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Credentials']]) {
-                    dir('./EKS_Terraform') {
-                        sh 'tfsec . --severity CRITICAL --out tfsec-report.json --format json' // Runs tfsec and filters results to include only critical issues, outputting them in JSON format to tfsec-report.json.
-                    }
-                }
-            }
+        // stage('Tfsec') {  // This stage will ensure that your Terraform code is checked for potential security vulnerabilities before proceeding with the plan and apply/destroy stages
+        //     steps {
+        //         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Credentials']]) {
+        //             dir('./EKS_Terraform') {
+        //                 sh 'tfsec . --severity CRITICAL --out tfsec-report.json --format json' // Runs tfsec and filters results to include only critical issues, outputting them in JSON format to tfsec-report.json.
+        //             }
+        //         }
+        //     }
 
-            post {
-                always {  // Archives the tfsec report file, ensuring it is stored as a build artifact even if the stage fails.
-                    archiveArtifacts artifacts: 'EKS_Terraform/tfsec-report.json', allowEmptyArchive: true
-                }
-            }
-        }
+        //     post {
+        //         always {  // Archives the tfsec report file, ensuring it is stored as a build artifact even if the stage fails.
+        //             archiveArtifacts artifacts: 'EKS_Terraform/tfsec-report.json', allowEmptyArchive: true
+        //         }
+        //     }
+        // }
 
 
         stage('Terraform plan') {
