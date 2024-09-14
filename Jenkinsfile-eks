@@ -23,15 +23,9 @@ pipeline {
     stage('Check Git Path') {
         steps {
             sh 'which git'  // This prints the path to the Git executable
-        }
-    }
-
-    stage('Check EKS_Terraform directory') {
-        steps {
             sh 'ls -la /home/ubuntu/workspace/Terrform-CI/EKS_Terraform'
         }
     }
-
 
     stage('Check EKS_Terraform directory') {
         steps {
