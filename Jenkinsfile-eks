@@ -20,6 +20,17 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Gabinsime75/Project_02--Register-App.git', credentialsId: 'github'
             }
         }
+    stage('Verify Terraform Files') {
+        steps {
+            script {
+                dir('./EKS_Terraform') {
+                    sh 'ls -al'  // List the files in the directory to ensure they exist
+                    sh 'cat backend.tf'  // Try to print the contents of a specific file to check if it is accessible
+                }
+            }
+        }
+    }
+
 
         stage('Terraform init') {
             steps {
@@ -48,21 +59,26 @@ pipeline {
             }
         }
 
-        stage('Tfsec') {  // This stage will ensure that your Terraform code is checked for potential security vulnerabilities before proceeding with the plan and apply/destroy stages
+        stage('Tfsec') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Credentials']]) {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'AWS Credentials',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
                     dir('./EKS_Terraform') {
-                        sh 'tfsec . --severity CRITICAL --out tfsec-report.json --format json' // Runs tfsec and filters results to include only critical issues, outputting them in JSON format to tfsec-report.json.
+                        sh 'docker run --rm -v $(pwd):/src aquasec/tfsec /src --severity CRITICAL --out tfsec-report.json --format json'
                     }
                 }
             }
-
             post {
-                always {  // Archives the tfsec report file, ensuring it is stored as a build artifact even if the stage fails.
+                always {
                     archiveArtifacts artifacts: 'EKS_Terraform/tfsec-report.json', allowEmptyArchive: true
                 }
             }
         }
+
 
         stage('Terraform plan') {
             steps {
