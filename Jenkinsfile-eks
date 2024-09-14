@@ -29,6 +29,13 @@ pipeline {
     stage('Check EKS_Terraform directory') {
         steps {
             sh 'ls -la /home/ubuntu/workspace/Terrform-CI/EKS_Terraform'
+        }
+    }
+
+
+    stage('Check EKS_Terraform directory') {
+        steps {
+            sh 'ls -la /home/ubuntu/workspace/Terrform-CI/EKS_Terraform'
             }
         }
 
