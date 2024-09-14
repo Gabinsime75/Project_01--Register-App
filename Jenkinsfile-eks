@@ -26,6 +26,12 @@ pipeline {
         }
     }
 
+    stage('Check EKS_Terraform directory') {
+        steps {
+            sh 'ls -la /home/ubuntu/workspace/Terrform-CI/EKS_Terraform'
+            }
+        }
+
         stage('Terraform init') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Credentials']]) {
