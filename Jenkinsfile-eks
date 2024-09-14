@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Gabinsime75/Project_02--Register-App.git', credentialsId: 'github'
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/Gabinsime75/Project_02--Register-App.git']], credentialsId: 'github'])
             }
         }
     stage('Check Git Path') {
