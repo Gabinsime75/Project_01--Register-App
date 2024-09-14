@@ -20,17 +20,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Gabinsime75/Project_02--Register-App.git', credentialsId: 'github'
             }
         }
-    stage('Verify Terraform Files') {
-        steps {
-            script {
-                dir('./EKS_Terraform') {
-                    sh 'ls -al'  // List the files in the directory to ensure they exist
-                    sh 'cat backend.tf'  // Try to print the contents of a specific file to check if it is accessible
-                }
-            }
-        }
-    }
-
 
         stage('Terraform init') {
             steps {
