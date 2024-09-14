@@ -9,7 +9,7 @@ pipeline{
 
     // Define environmental variables
     environment {
-	    APP_NAME        = "register-app-pipeline2"
+	APP_NAME        = "register-app_pipeline"
         RELEASE         = "1.0.0"
         DOCKER_USER     = "gabin75"
         DOCKER_PASS     = 'dockerhub'
@@ -29,7 +29,7 @@ pipeline{
         stage('Checkout from SCM'){
             // Checks out the code from the GitHub repository on the main branch using credentials identified as github.
             steps{
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Gabinsime75/Project_01--Register-App.git'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Gabinsime75/Project_02--Register-App.git'
             }
         }
 
@@ -51,20 +51,20 @@ pipeline{
            steps {
             // analyze the code for quality issues such as bugs, vulnerabilities, and code smells. 
 	           script {
-		        withSonarQubeEnv(credentialsId: 'Sonar-jenkins-token') { 
+		        withSonarQubeEnv(credentialsId: 'sonarqube-token') { 
                         sh "mvn sonar:sonar"
 		            }
 	           }	
            }
        }
 
-    //    stage("Quality Gate"){
-    //        steps {
-    //         script {
-    //             waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-jenkins-token'
-    //             } 	
-    //         }
-    //     }
+       stage("Quality Gate"){
+           steps {
+            script {
+                waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
+                } 	
+            }
+        }
 
         stage ('OWASP Dependency Check') {
             // Scans the project for known vulnerabilities in dependencies, 
