@@ -20,6 +20,11 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Gabinsime75/Project_02--Register-App.git', credentialsId: 'github'
             }
         }
+    stage('Check Git Path') {
+        steps {
+            sh 'which git'  // This prints the path to the Git executable
+        }
+    }
 
         stage('Terraform init') {
             steps {
