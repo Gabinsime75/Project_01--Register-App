@@ -40,34 +40,6 @@ pipeline {
                 }
             }
         }
-        stage ('Pull tfsec Docker Image') {
-            steps {
-                script {
-                    sh 'docker pull aquasec/tfsec'
-                }
-            }
-        }
-
-        stage('Tfsec') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS Credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
-                    dir('./EKS_Terraform') {
-                        sh 'docker run --rm -v $(pwd):/src aquasec/tfsec /src --severity CRITICAL --out tfsec-report.json --format json'
-                    }
-                }
-            }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'EKS_Terraform/tfsec-report.json', allowEmptyArchive: true
-                }
-            }
-        }
-
 
         stage('Terraform plan') {
             steps {
